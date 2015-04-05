@@ -1,0 +1,5 @@
+---
+
+- name: create zfs filesys for jails
+  shell: zfs create {{zfs_jails_pool}}/{{ jails_dir }}
+
