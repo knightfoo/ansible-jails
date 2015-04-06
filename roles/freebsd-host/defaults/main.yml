@@ -1,0 +1,5 @@
+---
+
+zfs_jails_pool: zroot
+jails_dir: /jails
+jail_version: 10.1
