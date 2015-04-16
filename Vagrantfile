@@ -8,6 +8,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "freebsd"
   config.vm.box_check_update = false
+  # disable default shared folder, we don't need it with ansible
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # config.vm.provider "virtualbox" do |vb|
   #   # Don't boot with headless mode
@@ -20,7 +22,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "playbook.yml"
     ansible.extra_vars = {
       jails_zfs_pool: "tank",
-      jails_dir: "/jails"
+      jails_dir: "/jails",
+      remote_user: "vagrant"
     }
   end
 end
