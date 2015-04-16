@@ -1,4 +1,6 @@
 ---
+# playbook.yml
+# default playbook for vagrant tests
 - hosts: all
   remote_user: vagrant
   sudo: yes
