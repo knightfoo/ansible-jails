@@ -3,4 +3,4 @@
   remote_user: vagrant
   sudo: yes
   roles:
-    - freebsd-host
+    - jails-host
