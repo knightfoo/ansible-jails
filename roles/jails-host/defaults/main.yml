@@ -3,3 +3,5 @@
 jails_zfs_pool: zroot
 jails_dir: /jails
 jails_version: 10.1
+jails_clone_interface: lo1
+jails_ipv4_range: 192.168.199.1-30/27

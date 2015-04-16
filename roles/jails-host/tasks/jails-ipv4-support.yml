@@ -1,0 +1,20 @@
+---
+# roles/jails-host/task/jails-supports-ipv4.yml
+#
+# configure cloned interfaces and ipv4 range of addresses
+# TODO: deal with pf or ipfw configuration
+
+- name: setup ipv4 boot time configuration file
+  template:
+    src: jails-ipv4-support.rc.conf.j2
+    dest: /etc/rc.conf.d/jails-ipv4-support.rc.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: setup clone interface
+
+- name: include ipv4 configuration file at startup
+  lineinfile:
+    dest: /etc/rc.conf
+    line: ". /etc/rc.conf.d/jails-ipv4-support.rc.conf"
+

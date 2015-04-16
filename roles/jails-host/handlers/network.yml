@@ -1,0 +1,6 @@
+---
+# roles/jails-host/handlers/network.yml
+#
+# various network related handlers
+- name: setup clone interface
+  command: service netif cloneup

@@ -5,3 +5,4 @@
 #
 
 - include: master-template.yml
+- include: jails-ipv4-support.yml

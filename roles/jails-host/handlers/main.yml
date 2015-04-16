@@ -1,0 +1,4 @@
+---
+# roles/jails-hosts/handlers/main.yml
+# include all handlers
+- include: network.yml
