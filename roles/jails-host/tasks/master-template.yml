@@ -6,7 +6,7 @@
 
 - name: create zfs filesystem for jails
   zfs:
-    name: "{{ jails_jails_pool }}{{ jails_dir }}"
+    name: "{{ jails_zfs_pool }}{{ jails_dir }}"
     mountpoint: "{{ jails_dir }}"
     state: present
 
@@ -26,12 +26,13 @@
 - name: get base OS archive
   get_url:
     url: "http://ftp.belnet.be/ftp.freebsd.org/pub/FreeBSD/releases/amd64/{{ jails_version }}-RELEASE/base.txz"
-    dest: "{{ jails_zfs_pool }}{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
+    dest: "{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
     force: no
 
 - name: extract base OS archive
   unarchive:
     copy: no
     creates: "{{ jails_dir }}/.master/etc"
+    src: "{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
     dest: "{{ jails_dir }}/.master/"
 
