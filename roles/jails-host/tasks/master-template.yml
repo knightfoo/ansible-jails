@@ -1,0 +1,37 @@
+---
+# roles/fjails-host/task/mster-templateain.yml
+#
+# Configure the required zfs filesystems, download the OS files and setup
+# The master template for the jails.
+
+- name: create zfs filesystem for jails
+  zfs:
+    name: "{{ jails_jails_pool }}{{ jails_dir }}"
+    mountpoint: "{{ jails_dir }}"
+    state: present
+
+- name: create zfs filesystem for master jail template
+  zfs:
+    name: "{{ jails_zfs_pool }}{{ jails_dir }}/.master"
+    compression: lz4
+    state: present
+
+- name: create directory for downloaded files
+  file: 
+    name: "{{ jails_dir }}/.downloads"
+    state: directory
+    mode: 0777
+    owner: "{{ remote_user }}"
+
+- name: get base OS archive
+  get_url:
+    url: "http://ftp.belnet.be/ftp.freebsd.org/pub/FreeBSD/releases/amd64/{{ jails_version }}-RELEASE/base.txz"
+    dest: "{{ jails_zfs_pool }}{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
+    force: no
+
+- name: extract base OS archive
+  unarchive:
+    copy: no
+    creates: "{{ jails_dir }}/.master/etc"
+    dest: "{{ jails_dir }}/.master/"
+
