@@ -1,0 +1,35 @@
+---
+# roles/jails-host/tasks/rebind-services.yml
+# Ensure the hosts services don't bind to all interfaces
+#
+# TODO: sshd
+
+- name: include sendmail boot conf in rc.conf
+  lineinfile:
+    dest: /etc/rc.conf
+    line: ". /etc/rc.conf.d/sendmail.rc.conf"
+
+# sendmail
+- name: deploy sendmail boot conf
+  copy:
+    src: sendmail.rc.conf
+    dest: /etc/rc.conf.d/sendmail.rc.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: disable sendmail
+
+- name: include syslog boot conf in rc.conf
+  lineinfile:
+    dest: /etc/rc.conf
+    line: ". /etc/rc.conf.d/syslog.rc.conf"
+
+# syslog
+- name: deploy syslog boot conf
+  copy:
+    src: syslog.rc.conf
+    dest: /etc/rc.conf.d/syslog.rc.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: restart syslog

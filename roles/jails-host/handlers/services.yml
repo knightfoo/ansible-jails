@@ -1,0 +1,6 @@
+- name: disable sendmail
+  service: name=sendmail state=stopped
+
+- name: restart syslog
+  service: name=syslogd state=restarted
+
