@@ -9,6 +9,7 @@ echo "Fixing python symlinks"
 ln -sf /usr/local/bin/python2.7 /usr/local/bin/python
 ln -sf /usr/local/bin/python2.7-config /usr/local/bin/python-config
 ln -sf /usr/local/bin/pydoc2.7 /usr/local/bin/pydoc
+echo '193.190.67.98 ftp.belnet.be' >> /etc/hosts
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
