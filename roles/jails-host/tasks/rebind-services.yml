@@ -33,3 +33,12 @@
     group: wheel
     mode: 0644
   notify: restart syslog
+
+# ssh
+- name: rebind ssh to the external ip address
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: 'ListenAddress.+0\.0\.0\.0'
+    line: "ListenAddress {{ ansible_default_ipv4.address }}"
+  notify: restart ssh
+

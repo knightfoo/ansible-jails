@@ -4,3 +4,5 @@
 - name: restart syslog
   service: name=syslogd state=restarted
 
+- name: restart ssh
+  service: name=sshd state=restarted
