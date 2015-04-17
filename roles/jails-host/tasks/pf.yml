@@ -1,0 +1,28 @@
+---
+# roles/jails-hosts/task/pf.yml
+# configure pf firewall for jails
+#
+
+- name: include pf boot config in rc.conf
+  lineinfile:
+    dest: /etc/rc.conf
+    line: ". /etc/rc.conf.d/pf.rc.conf"
+
+- name: deploy pf boot config
+  copy:
+    src: pf.rc.conf
+    dest: /etc/rc.conf.d/pf.rc.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: enable pf
+
+- name: deploy pf rules
+  template:
+    src: pf.conf.j2
+    dest: /etc/pf.conf
+    owner: root
+    group: wheel
+    mode: 0644
+  notify: reload pf
+

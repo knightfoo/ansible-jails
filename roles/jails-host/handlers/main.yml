@@ -3,3 +3,4 @@
 # include all handlers
 - include: network.yml
 - include: services.yml
+- include: pf.yml

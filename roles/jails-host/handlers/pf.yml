@@ -1,0 +1,8 @@
+- name: enable pf
+  shell: "kldload pf.ko; kldload pflog.ko; pfctl -e"
+
+- name: disable pf
+  command: pfctl -d
+
+- name: reload pf
+  command: pfctl -f /etc/pf.conf

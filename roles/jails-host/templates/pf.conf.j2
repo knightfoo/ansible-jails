@@ -1,0 +1,10 @@
+ext_if="{{ ansible_default_ipv4.interface }}"
+jails_if="{{ jails_clone_interface }}"
+jails_net="{{ jails_ipv4_net }}"
+
+nat on $ext_if from $jails_net to any -> ($ext_if)
+
+pass quick proto tcp from any to any port 22
+pass from $jails_net to any 
+pass out
+block in

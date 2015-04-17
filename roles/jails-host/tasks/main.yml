@@ -7,3 +7,4 @@
 - include: master-template.yml
 - include: jails-ipv4-support.yml
 - include: rebind-services.yml
+- include: pf.yml
