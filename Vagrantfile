@@ -30,6 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "playbook.yml"
     ansible.extra_vars = {
+      ansible_python_interpreter: "/usr/local/bin/python",
       jails_zfs_pool: "tank",
       jails_dir: "/jails",
       remote_user: "vagrant"
