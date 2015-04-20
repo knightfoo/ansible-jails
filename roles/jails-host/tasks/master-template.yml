@@ -22,3 +22,8 @@
     creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/etc"
     dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/"
 
+- name: install master jail config
+  template:
+    dest: /etc/jails.conf.d/001_master.conf
+    src: jails/001_master.conf
+

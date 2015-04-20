@@ -1,0 +1,18 @@
+- name: create jail config directory
+  file:
+    dest: /etc/jails.conf.d
+    state: directory
+    owner: root
+    group: wheel
+    mode: 0755
+
+- name: install common jails config
+  template:
+    dest: /etc/jails.conf.d/000_common.conf
+    src: jails/000_common.conf
+
+- name: generate jail.conf
+  assemble:
+    src: /etc/jails.conf.d
+    dest: /etc/jail.conf
+

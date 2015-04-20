@@ -7,3 +7,4 @@ jails_clone_interface: lo1
 jails_ipv4_range: 192.168.199.1-30/27
 jails_ipv4_net: 192.168.199.0/27
 jail_master_tpl_name: master
+jails_domain_name: jails.satanis.me
