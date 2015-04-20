@@ -23,16 +23,9 @@
     mode: 0777
     owner: "{{ remote_user }}"
 
-- name: get base OS archive
-  get_url:
-    url: "http://ftp.belnet.be/ftp.freebsd.org/pub/FreeBSD/releases/amd64/{{ jails_version }}-RELEASE/base.txz"
-    dest: "{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
-    force: no
-
 - name: extract base OS archive
   unarchive:
-    copy: no
+    src: "{{ local_archive_path }}/base.txz"
     creates: "{{ jails_dir }}/.master/etc"
-    src: "{{ jails_dir }}/.downloads/{{ jails_version}}-base.txz"
     dest: "{{ jails_dir }}/.master/"
 
