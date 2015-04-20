@@ -26,4 +26,5 @@
   template:
     dest: /etc/jails.conf.d/001_master.conf
     src: jails/001_master.conf
+  notify: generate jail.conf
 

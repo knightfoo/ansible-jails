@@ -4,3 +4,4 @@
 - include: network.yml
 - include: services.yml
 - include: pf.yml
+- include: jaildotconf.yml

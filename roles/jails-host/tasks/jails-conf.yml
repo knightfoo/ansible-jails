@@ -10,9 +10,5 @@
   template:
     dest: /etc/jails.conf.d/000_common.conf
     src: jails/000_common.conf
-
-- name: generate jail.conf
-  assemble:
-    src: /etc/jails.conf.d
-    dest: /etc/jail.conf
+  notify: generate jail.conf
 
