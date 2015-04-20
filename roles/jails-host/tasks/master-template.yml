@@ -12,7 +12,7 @@
 
 - name: create zfs filesystem for master jail template
   zfs:
-    name: "{{ jails_zfs_pool }}{{ jails_dir }}/.master"
+    name: "{{ jails_zfs_pool }}{{ jails_dir }}/{{ jail_master_tpl_name }}"
     compression: lz4
     state: present
 
@@ -26,6 +26,6 @@
 - name: extract base OS archive
   unarchive:
     src: "{{ local_archive_path }}/base.txz"
-    creates: "{{ jails_dir }}/.master/etc"
-    dest: "{{ jails_dir }}/.master/"
+    creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/etc"
+    dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/"
 
