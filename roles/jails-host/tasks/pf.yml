@@ -3,18 +3,18 @@
 # configure pf firewall for jails
 #
 
-- name: include pf boot config in rc.conf
-  lineinfile:
-    dest: /etc/rc.conf
-    line: ". /etc/rc.conf.d/pf.rc.conf"
+- name: check if pf is enabled
+  command: sysrc -c pf_enable="YES"
+  ignore_errors: True
+  register: pf_enabled
 
-- name: deploy pf boot config
-  copy:
-    src: pf.rc.conf
-    dest: /etc/rc.conf.d/pf.rc.conf
-    owner: root
-    group: wheel
-    mode: 0644
+- name: enable pf at boot
+  command: sysrc {{ item }}="YES"
+  with_items:
+    - gateway_enable
+    - pf_enable
+    - pflog_enable
+  when: pf_enabled|failed
   notify: enable pf
 
 - name: deploy pf rules

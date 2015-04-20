@@ -4,17 +4,22 @@
 # configure cloned interfaces and ipv4 range of addresses
 # TODO: deal with pf or ipfw configuration
 
-- name: setup ipv4 boot time configuration file
-  template:
-    src: jails-ipv4-support.rc.conf.j2
-    dest: /etc/rc.conf.d/jails-ipv4-support.rc.conf
-    owner: root
-    group: wheel
-    mode: 0644
-  notify: setup clone interface
+- name: check cloned interface
+  command: sysrc -c cloned_interfaces={{ jails_clone_interface }}
+  register: cloned_if
+  ignore_errors: True
 
-- name: include ipv4 configuration file at startup
-  lineinfile:
-    dest: /etc/rc.conf
-    line: ". /etc/rc.conf.d/jails-ipv4-support.rc.conf"
+- name: setup cloned interface
+  command: sysrc cloned_interfaces={{ jails_clone_interface }}
+  when: cloned_if|failed
+
+- name: check colone interface range
+  command: sysrc -c ifconfig_{{ jails_clone_interface }}_alias0={{ jails_ipv4_range}}
+  register: cloned_if_net
+  ignore_errors: True
+
+- name: setup clone interface ipv4 range
+  command: sysrc ifconfig_{{ jails_clone_interface }}_alias0={{ jails_ipv4_range}}
+  when: cloned_if_net|failed
+  notify: setup clone interface
 

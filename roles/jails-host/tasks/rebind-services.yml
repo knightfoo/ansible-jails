@@ -2,43 +2,44 @@
 # roles/jails-host/tasks/rebind-services.yml
 # Ensure the hosts services don't bind to all interfaces
 #
-# TODO: sshd
-
-- name: include sendmail boot conf in rc.conf
-  lineinfile:
-    dest: /etc/rc.conf
-    line: ". /etc/rc.conf.d/sendmail.rc.conf"
 
 # sendmail
-- name: deploy sendmail boot conf
-  copy:
-    src: sendmail.rc.conf
-    dest: /etc/rc.conf.d/sendmail.rc.conf
-    owner: root
-    group: wheel
-    mode: 0644
+- name: check if sendmail is disabled
+  command: sysrc -c sendmail_enable=NO
+  register: sendmail_enabled
+  ignore_errors: True
+
+- name: disable sendmail
+  command: sysrc {{ item }}=NO
+  with_items:
+    - sendmail_enable
+    - sendmail_submit_enable
+    - sendmail_outbound_enable
+    - sendmail_msp_queue_enable
+  when: sendmail_enabled|failed
   notify: disable sendmail
 
-- name: include syslog boot conf in rc.conf
-  lineinfile:
-    dest: /etc/rc.conf
-    line: ". /etc/rc.conf.d/syslog.rc.conf"
 
 # syslog
-- name: deploy syslog boot conf
-  copy:
-    src: syslog.rc.conf
-    dest: /etc/rc.conf.d/syslog.rc.conf
-    owner: root
-    group: wheel
-    mode: 0644
+- name: check if syslog is bound to localhost
+  command: sysrc -c syslogd_flags="-b 127.0.0.1"
+  register: syslog_local
+  ignore_errors: True
+
+- name: enable syslog at boot
+  command: sysrc syslogd_enable="YES"
+  when: syslog_local|failed
+
+- name: rebind syslog to localhost
+  command: sysrc syslogd_flags="-b 127.0.0.1"
+  when: syslog_local|failed
   notify: restart syslog
 
 # ssh
 - name: rebind ssh to the external ip address
   lineinfile:
     dest: /etc/ssh/sshd_config
-    regexp: 'ListenAddress.+0\.0\.0\.0'
+    regexp: 'ListenAddress +\d+\.\d+\.+\d+\.\d+'
     line: "ListenAddress {{ ansible_default_ipv4.address }}"
   notify: restart ssh
 
