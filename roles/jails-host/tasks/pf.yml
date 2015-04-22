@@ -15,7 +15,6 @@
     - pf_enable
     - pflog_enable
   when: pf_enabled|failed
-  notify: enable pf
 
 - name: deploy pf rules
   template:
@@ -25,4 +24,12 @@
     group: wheel
     mode: 0644
   notify: reload pf
+
+- name: enable pf
+  shell: "kldload pf.ko; kldload pflog.ko; pfctl -e"
+  when: pf_enabled|failed
+
+- name: reload pf
+  command: pfctl -f /etc/pf.conf
+  when: pf_enabled|failed
 

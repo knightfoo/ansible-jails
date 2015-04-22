@@ -9,6 +9,7 @@
     name: "{{ jails_zfs_pool }}{{ jails_dir }}"
     mountpoint: "{{ jails_dir }}"
     state: present
+    dedup: "on"
 
 - name: create zfs filesystem for master jail template
   zfs:
@@ -22,9 +23,86 @@
     creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/etc"
     dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/"
 
-- name: install master jail config
-  template:
-    dest: /etc/jails.conf.d/001_master.conf
-    src: jails/001_master.conf
-  notify: generate jail.conf
+- name: configure master jail ip
+  lineinfile:
+    dest: /etc/jail.conf
+    line: "{{ jail_master_tpl_name }} { ip4.addr = {{ jail_master_tpl_addr }}; }"
 
+- name: check master template startup config
+  command: sysrc -c -R {{ jails_dir }}/{{ jail_master_tpl_name }} sshd_enable=YES
+  ignore_errors: True
+  register: master_jail_rc_configured
+
+- name: configure master template startup
+  command: sysrc -R {{ jails_dir }}/{{ jail_master_tpl_name }} {{ item }}
+  with_items:
+    - hostname={{ jail_master_tpl_name }}
+    - sshd_enable=YES
+    - syslogd_enable=YES
+  when: master_jail_rc_configured|failed
+
+- name: setup jail resolv.conf from host
+  command: cp /etc/resolv.conf  {{ jails_dir }}/{{ jail_master_tpl_name }}/etc/
+  args:
+    creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/etc/resolv.conf"
+
+- name: jail if master jail is running
+  shell: jls -j {{ jail_master_tpl_name }}
+  ignore_errors: True
+  register: master_jail_running
+
+- name: start the master jail
+  command: jail -c {{ jail_master_tpl_name }}
+  when: master_jail_running|failed
+
+- name: install jail basic packages
+  command: pkg -j {{ jail_master_tpl_name }} install -y {{ item }}
+  with_items:
+    - sudo
+    - python
+    - bash
+    - pkg
+  args:
+    creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/usr/local/bin/sudo"
+
+- name: check if admin user exists in the jail
+  command: jexec {{ jail_master_tpl_name }} id {{ jails_admin_user }}
+  ignore_errors: True
+  register: jail_admin_exists
+
+- name: setup jail admin user
+  shell: echo {{ jails_admin_pass }} | jexec {{ jail_master_tpl_name }} pw useradd -h 0 -G wheel -m -n {{ jails_admin_user }} -s /usr/local/bin/bash
+  when: jail_admin_exists|failed
+
+- name: add jail admin to sudoers
+  lineinfile:
+    dest:  "{{ jails_dir }}/{{ jail_master_tpl_name }}/usr/local/etc/sudoers"
+    line: "{{ jails_admin_user }} ALL=(ALL) NOPASSWD: ALL"
+    validate: 'visudo -cf %s'
+
+- name: create jail admin ssh config dir
+  file:
+    dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/usr/home/{{ jails_admin_user }}/.ssh"
+    state: directory
+    owner: 1001
+    group: 1001
+    mode: 0700
+
+- name: setup jail admin ssh key
+  template:
+    src: authorized_keys.j2
+    dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/usr/home/{{ jails_admin_user }}/.ssh/authorized_keys"
+    owner: 1001
+    group: 1001
+    mode: 0700
+
+- name: stop the master jail
+  command: jail -r {{ jail_master_tpl_name }}
+
+- name: remove the master  jail ssh hostkeys
+  command: rm -f {{ jails_dir }}/{{ jail_master_tpl_name }}/etc/ssh/ssh_host_*
+
+- name: snapshot the master jail fs
+  zfs:
+    name: "{{ jails_zfs_pool }}{{ jails_dir }}/{{ jail_master_tpl_name }}@SNAP"
+    state: present

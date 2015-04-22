@@ -7,4 +7,9 @@ jails_clone_interface: lo1
 jails_ipv4_range: 192.168.199.1-30/27
 jails_ipv4_net: 192.168.199.0/27
 jail_master_tpl_name: master
+jail_master_tpl_addr: 192.168.199.1
 jails_domain_name: jails.satanis.me
+
+jails_admin_pass: toto
+jails_admin_user: twisla
+jails_admin_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtMhKbklzMrr291NKniwNWuLLnRqTcgKMXOTBESBV1iSergfRT6dYYfIm1EEXJ03AKm4LxTs2ciMj6U049HYHHlmYWChJDON39Pt3tYr9uvb2fWgGnzRHXmvArOVRobHm7ouVXZtGz9wCfrcvpX+hQJavGpyvVav/1JnFdUHW+ICkYwAxcW+eqPYLdh+xCBKmNNr6RwakJGawFTTYJ6DxeCWgFAP0g0OW/WnWCmeTz68cF12Y0Vy1RsTV+ve8fW2AiIhsPjW7WFHW/rt5UMd/Z8QgieW3XG12azT4jDicfFc7DGZNDoLuIBPr3twFLMZzc6jhPwXeleaqciw7UQFbPw== twisla@nocturnum.tabouret.ne"

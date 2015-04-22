@@ -1,3 +1,5 @@
+# Jail common config, managed by ansible
+
 exec.start = "/bin/sh /etc/rc";
 exec.stop = "/bin/sh /etc/rc.shutdown";
 exec.clean;
@@ -5,4 +7,4 @@ mount.devfs;
 path = "{{ jails_dir }}/$name";
 host.hostname = "$name.{{ jails_domain_name }}";
 
-
+# jails individual settings, also managed by ansible.

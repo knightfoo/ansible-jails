@@ -9,4 +9,5 @@
 - include: pf.yml
 - include: jails-conf.yml
 - include: master-template.yml
+- include: jails.yml
 

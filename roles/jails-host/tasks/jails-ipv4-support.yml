@@ -21,5 +21,7 @@
 - name: setup clone interface ipv4 range
   command: sysrc ifconfig_{{ jails_clone_interface }}_alias0={{ jails_ipv4_range}}
   when: cloned_if_net|failed
-  notify: setup clone interface
 
+- name: setup clone interface
+  command: service netif cloneup
+  when: cloned_if_net|failed

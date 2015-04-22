@@ -1,0 +1,20 @@
+- name: create jails filesystems
+  command: zfs clone {{ jails_zfs_pool }}{{ jails_dir }}/{{ jail_master_tpl_name }}@SNAP  {{ jails_zfs_pool }}{{ jails_dir }}/{{ item.key }}
+  args:
+    creates: "{{ jails_dir }}/{{ item.key }}"
+  with_dict: jails
+
+- name: create jails configs
+  lineinfile:
+    dest: /etc/jail.conf
+    line: "{{ item.key }} { ip4.addr = {{ item.value.ip4 }}; ip6.addr = {{ item.value.ip6 }}; }"
+  with_dict: jails
+
+- name: configure jails hostnames
+  command: sysrc -R {{ jails_dir }}/{{ item.key }} hostname={{ item.key }}.{{ jails_domain_name }}
+  with_dict: jails
+
+- name: start jails if they don't run
+  command: jail -c {{ item.key }}
+  with_dict: jails
+  ignore_errors: True
