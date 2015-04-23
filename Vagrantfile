@@ -31,20 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "playbook.yml"
     ansible.extra_vars = {
       ansible_python_interpreter: "/usr/local/bin/python",
-      local_archive_path: "/home/twisla/tmp",
-      jails_zfs_pool: "tank",
-      jails_dir: "/jails",
       remote_user: "vagrant",
-      jails: {
-        testjail: {
-          ip4: "192.168.199.2",
-          ip6: "2a02:578:3fe:81a3::20"
-        },
-        badabim: {
-          ip4: "192.168.199.3",
-          ip6: "2a02:578:3fe:81a3::30"
-        },
-      }
     }
   end
 end
