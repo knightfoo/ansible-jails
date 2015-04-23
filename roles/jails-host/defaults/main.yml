@@ -1,6 +1,6 @@
 ---
-
-jails_zfs_pool: zroot
+local_archive_path: /tmp
+jails_zfs_pool: tank
 jails_dir: /jails
 jails_version: 10.1
 jails_clone_interface: lo1
@@ -8,8 +8,16 @@ jails_ipv4_range: 192.168.199.1-30/27
 jails_ipv4_net: 192.168.199.0/27
 jail_master_tpl_name: master
 jail_master_tpl_addr: 192.168.199.1
-jails_domain_name: jails.satanis.me
+jails_domain_name: jails.example.com
 
-jails_admin_pass: toto
-jails_admin_user: twisla
-jails_admin_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtMhKbklzMrr291NKniwNWuLLnRqTcgKMXOTBESBV1iSergfRT6dYYfIm1EEXJ03AKm4LxTs2ciMj6U049HYHHlmYWChJDON39Pt3tYr9uvb2fWgGnzRHXmvArOVRobHm7ouVXZtGz9wCfrcvpX+hQJavGpyvVav/1JnFdUHW+ICkYwAxcW+eqPYLdh+xCBKmNNr6RwakJGawFTTYJ6DxeCWgFAP0g0OW/WnWCmeTz68cF12Y0Vy1RsTV+ve8fW2AiIhsPjW7WFHW/rt5UMd/Z8QgieW3XG12azT4jDicfFc7DGZNDoLuIBPr3twFLMZzc6jhPwXeleaqciw7UQFbPw== twisla@nocturnum.tabouret.ne"
+jails_admin_pass: vagrant
+jails_admin_user: vagrant
+jails_admin_key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"
+
+jails:
+  testjail:
+    ip4: 192.168.199.2
+    ip6: "::2"
+  testail2:
+    ip4: 192.168.199.3
+    ip6: "::3"
