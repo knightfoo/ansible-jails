@@ -13,7 +13,7 @@ SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "freebsd"
+  config.vm.box = "http://twis.la/stuff/fbsd10.box"
   config.vm.box_check_update = false
   # disable default shared folder, we don't need it with ansible
   config.vm.synced_folder ".", "/vagrant", disabled: true
