@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   vb.customize ["modifyvm", :id, "--memory", "1024"]
   # end
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "vagrant.yml"
     ansible.extra_vars = {
       ansible_python_interpreter: "/usr/local/bin/python",
       remote_user: "vagrant",
