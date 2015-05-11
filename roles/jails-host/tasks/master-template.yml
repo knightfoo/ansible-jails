@@ -78,7 +78,7 @@
   lineinfile:
     dest:  "{{ jails_dir }}/{{ jail_master_tpl_name }}/usr/local/etc/sudoers"
     line: "{{ jails_admin_user }} ALL=(ALL) NOPASSWD: ALL"
-    validate: 'visudo -cf %s'
+    validate: 'echo %s; jexec {{ jail_master_tpl_name }} visudo -cf /usr/local/etc/sudoers'
 
 - name: create jail admin ssh config dir
   file:
