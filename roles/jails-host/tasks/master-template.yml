@@ -1,5 +1,5 @@
 ---
-# roles/fjails-host/task/mster-templateain.yml
+# roles/jails-host/task/master-template.yml
 #
 # Configure the required zfs filesystems, download the OS files and setup
 # The master template for the jails.
