@@ -10,18 +10,39 @@
     mountpoint: "{{ jails_dir }}"
     state: present
     dedup: "on"
+  tags:
+    - master      
 
 - name: create zfs filesystem for master jail template
   zfs:
     name: "{{ jails_zfs_pool }}{{ jails_dir }}/{{ jail_master_tpl_name }}"
     compression: lz4
     state: present
+  tags:
+    - master
+
+- name: Create datasets for master jail template
+  zfs: 
+    name: "{{ jails_zfs_pool }}{{ jails_dir }}/{{ jail_master_tpl_name }}/{{ item }}"
+    compression: lz4
+    state: present
+  with_items: datasets      
+  tags:
+    - master    
 
 - name: extract base OS archive
   unarchive:
-    src: "{{ local_archive_path }}/base.txz"
+    src: "{{ local_archive_path }}/{{ jails_version }}/{{ item }}"
     creates: "{{ jails_dir }}/{{ jail_master_tpl_name }}/etc"
     dest: "{{ jails_dir }}/{{ jail_master_tpl_name }}/"
+    copy: no
+  with_items:
+    - base.txz
+    - kernel.txz      
+  tags: 
+    - master      
+    - extract  
+      
 
 - name: configure master jail ip
   lineinfile:

@@ -8,6 +8,8 @@
   command: sysrc -c sendmail_enable=NO
   register: sendmail_enabled
   ignore_errors: True
+  tags:
+    - rebind      
 
 - name: disable sendmail
   command: sysrc {{ item }}=NO
@@ -18,6 +20,8 @@
     - sendmail_msp_queue_enable
   when: sendmail_enabled|failed
   notify: disable sendmail
+  tags:
+    - rebind    
 
 
 # syslog
@@ -25,15 +29,21 @@
   command: sysrc -c syslogd_flags="-b 127.0.0.1"
   register: syslog_local
   ignore_errors: True
+  tags:
+    - rebind    
 
 - name: enable syslog at boot
   command: sysrc syslogd_enable="YES"
   when: syslog_local|failed
+  tags:
+    - rebind    
 
 - name: rebind syslog to localhost
   command: sysrc syslogd_flags="-b 127.0.0.1"
   when: syslog_local|failed
   notify: restart syslog
+  tags:
+    - rebind    
 
 # ssh
 - name: rebind ssh to the external ip address
@@ -42,4 +52,7 @@
     regexp: 'ListenAddress +\d+\.\d+\.+\d+\.\d+'
     line: "ListenAddress {{ ansible_default_ipv4.address }}"
   notify: restart ssh
+  tags: 
+    - rebind
+
 

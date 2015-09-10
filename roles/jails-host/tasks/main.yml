@@ -4,10 +4,10 @@
 # Configure a FreeBSD host to deploy jails
 #
 
-- include: rebind-services.yml
-- include: jails-ipv4-support.yml
-- include: pf.yml
-- include: jails-conf.yml
+#- include: rebind-services.yml
+#- include: jails-ipv4-support.yml
+#- include: pf.yml
+#- include: jails-conf.yml
 - include: master-template.yml
 - include: jails.yml
 

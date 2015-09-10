@@ -1,8 +1,8 @@
 ---
 local_archive_path: /tmp
-jails_zfs_pool: tank
+jails_zfs_pool: tank0
 jails_dir: /jails
-jails_version: 10.1
+jails_version: 10.2
 jails_clone_interface: lo1
 jails_ipv4_range: 192.168.199.1-30/27
 jails_ipv4_net: 192.168.199.0/27
